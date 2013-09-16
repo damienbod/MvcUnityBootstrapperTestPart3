@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MvcUnityBootstrapperTest.Logging;
+using MvcUnityBootstrapperTest.UnityExtensions;
 
 namespace MvcUnityBootstrapperTest.Business
 {
-    public class UnitOfWorkExampleTest : IUnitOfWorkExample
+    [UnityIoCTransientLifetimeAttribute]
+    public class UnitOfWorkExample : IUnitOfWorkExample
     {
         static int _counter = 0; 
-        public UnitOfWorkExampleTest()
+        public UnitOfWorkExample()
         {
             _counter++;
             UnityEventLogger.Log.CreateUnityMessage("UnitOfWorkExampleTest " + _counter );

@@ -35,12 +35,24 @@ namespace MvcUnityBootstrapperTest.App_Start
         /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
         public static void RegisterTypes(IUnityContainer container)
         {
-            container.RegisterTypes(AllClasses.FromLoadedAssemblies(),
-                                    UnityHelpers.FromAllInterfacesWith_PerRequestLifetimeAttribute,
+            container.RegisterTypes(UnityHelpers.GetTypesWithCustomAttribute<UnityIoCPerRequestLifetimeAttribute>(AppDomain.CurrentDomain.GetAssemblies()),
+                                    WithMappings.FromMatchingInterface,
                                     WithName.Default,
                                     PerRequest
                                 )
-                     .RegisterType<IUnitOfWorkExample, UnitOfWorkExampleTest>(new TransientLifetimeManager());
+                     .RegisterTypes(UnityHelpers.GetTypesWithCustomAttribute<UnityIoCTransientLifetimeAttribute>(AppDomain.CurrentDomain.GetAssemblies()),
+                                    WithMappings.FromMatchingInterface,
+                                    WithName.Default,
+                                    WithLifetime.Transient
+                                );
+
+            // This method checks and for classes from Loaded Assemblies and creates a per request lifetime object for classes with the custom attribute 
+            //container.RegisterTypes(AllClasses.FromLoadedAssemblies(),
+            //                        UnityHelpers.FromAllInterfacesWith_PerRequestLifetimeAttribute,
+            //                        WithName.Default,
+            //                        PerRequest
+            //                    )
+            //         .RegisterType<IUnitOfWorkExample, UnitOfWorkExampleTest>(new TransientLifetimeManager());
  
         }
 
